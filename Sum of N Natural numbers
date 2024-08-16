@@ -1,0 +1,18 @@
+#include <iostream>
+
+int main() {
+
+    using namespace std;
+    int value , sum = 0;
+    cout << "\nEnter the last value till you want to find the sum: " ;
+    cin >> value ;
+    
+    for (int i = 1; i <= value; i++) // calculating Sum
+    {
+        sum += i;
+    }
+    
+    cout <<"\n The Summation is: " << sum ; // Printing Sum
+
+    return 0;
+}
