@@ -1,0 +1,32 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+
+
+int main() {
+    
+   using namespace std;
+   int value ;
+   cout << "\nEnter Value to Check whether it is Prime or not: " ; // Asking For Value
+   cin >> value;
+   
+   int count = 0;
+   for (int i = 1; i <= value; i++) // Checking For Prime
+   {
+       if ( value % i == 0)
+       {
+           count += 1;
+       }
+   }
+   
+   if(count == 2)
+   {
+       cout << endl << value << " is Prime Number." ; Printing Number if it is Prime
+   }
+   else
+   {
+       cout << endl << value << " is not Prime number. " ; // Printing if it is not Prime
+   }
+
+    return 0;
+}
+
