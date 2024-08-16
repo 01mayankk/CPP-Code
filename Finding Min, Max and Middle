@@ -1,0 +1,20 @@
+#include <iostream>
+
+int main() {
+
+    using namespace std;
+    int first, second, sum = 0;
+    
+    cout << "\nEnter First number: "; // Taking First input
+    cin >> first;
+    
+    cout << "\nEnter Second Number: "; // Taking Second input
+    cin >> second;
+    
+    sum = first + second ; // Calculating Sum
+    
+    cout <<"\n The summation is: " << sum; // Printing Sum
+    
+
+    return 0;
+}
