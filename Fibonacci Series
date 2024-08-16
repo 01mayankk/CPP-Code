@@ -1,0 +1,24 @@
+#include <iostream>
+
+int main() {
+    
+    using namespace std;
+    int term;
+    
+    cout << "\nEnter the no. of terms till you want Fibonacci Series: " ; // Taking Number of term
+    cin >> term;
+    
+    int hold, firstterm = 0, secondterm = 1 ; // First and Second term are predefined 
+    
+    cout << firstterm << " " << secondterm << " " ; // Printing First and Second Term
+    
+    for (int i = 2; i <= term; i++ ) // Printing next terms
+    {
+        hold = firstterm + secondterm;
+        cout << hold << " " ;
+        firstterm = secondterm;
+        secondterm = hold;
+    }
+
+    return 0;
+}
