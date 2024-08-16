@@ -1,0 +1,55 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    
+    int first, second, third;
+    cout << "\nEnter First number: "; // Taking First Input
+    cin >> first;
+    
+    cout << "\nEnter Second number: "; // Taking Second Input
+    cin >> second;
+    
+    cout << "\nEnter Third number: "; // Taking Third Input
+    cin >> third;
+    
+    cout << endl ; // Inserting New line
+    
+    if (first > second && first > third) // if First number is largest
+    {
+        if(second > third)
+        {
+            cout << first << " is largest." << second << " is middle " << third << " is smallest.";
+        }
+        else
+        {
+             cout << first << " is largest." << third << " is middle " << second << " is smallest." ;
+        }
+    }
+    
+    if(second > first && second > third) // If second number is largest
+    {
+        if ( first > third )
+        {
+             cout << second << " is largest." << first << " is middle " << third << " is smallest.";
+        }
+        else
+        {
+             cout << second << " is largest." << third << " is middle " << first << " is smallest." ;
+        }
+    }
+    
+    if(third > first && third > second) // If third number is largest
+    {
+        if ( first > second )
+        {
+             cout << third << " is largest." << first << " is middle " << second << " is smallest.";
+        }
+        else
+        {
+             cout << third << " is largest." << second << " is middle " << first << " is smallest." ;
+        }
+    }
+
+    return 0;
+}
