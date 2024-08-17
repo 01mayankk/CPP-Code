@@ -1,0 +1,52 @@
+#include <iostream>
+#include<string>
+
+using namespace std;
+class Employes // Creating Class for Employees details
+{
+    public:
+    
+    int id;
+    string name;
+    double salary ;
+    
+    void information () // Function for taking Employ Information 
+    {
+        int no_of_employ; 
+        
+        cout << "\nEnter No. Of Employees: " ; // Asking for No of Employ details to be entered
+        cin >> no_of_employ ;
+        
+        for (int i = 1; i <= no_of_employ; i++)
+        {
+            cin.ignore(100, '\n');
+            cout << "\nEnter Name of employ " << i  << ": "; // Taking Employ name
+            getline(cin, name );
+            
+            
+            cout << "\nEnter ID of employ " << i << ": "; // Taking Employ ID
+            cin >> id;
+            
+            cout << "\nEnter Salary of employ " << i << ": "; // Taking Employ Salary
+            cin >> salary ;
+            
+            cout << "\nThe details entered of Employ "<< i << " is: " ; // Printing the details of Employ
+            cout << "\nName: " << name ;
+            cout << "\nID: "<< id;
+            cout << "\nSalary: " << salary;
+             cout << endl << endl ;
+        }
+        
+    }
+    
+    
+    
+};
+int main() {
+    // Write C++ code here
+    Employes info; // Creating object
+    
+    info.information (); // Call for function
+
+    return 0;
+}
