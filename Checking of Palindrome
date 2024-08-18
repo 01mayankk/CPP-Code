@@ -1,0 +1,37 @@
+#include <iostream>
+using namespace std;
+
+void Check_Palindrome (int number) // Function to check whether the number is Palindrome or not
+{
+    int copy = number, digit = 0, value = 0;
+    
+    while (copy > 0) // Making reverse of number to check
+    {
+        digit = copy % 10 ;
+        value = value * 10 + digit ;
+        copy /= 10;
+    }
+    
+    if (value == number) // Verifing reverse of number with original
+    {
+        cout << "\n"<<number << " is Palindrome." ; // Printing if it is verified as Palindrome 
+    }
+    else
+    {
+        cout << "\n" << number << " is not Palindrome." ; //Printing if it is unsuccessful to be verified as Palindrome 
+    }
+    
+}
+
+int main() {
+    
+    int number;
+    
+    cout << "\nPlease Enter any number to check Palindrome: "; // Asking for the user for input
+    cin >> number ;
+    
+    Check_Palindrome (number); // Calling for Function to check whether it is Palindrome or not
+
+
+    return 0;
+}
