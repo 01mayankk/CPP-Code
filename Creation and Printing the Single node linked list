@@ -1,0 +1,39 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+#include <stdlib.h>
+
+using namespace std;
+
+struct node {
+    int data;
+    struct node* next;
+};
+
+// Function to create a new node and initialize its data
+struct node* createNode(int value) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node)); // Allocate memory for a new node
+
+    if (newNode == NULL) { // Check if memory allocation was successful
+        cout << "Memory allocation failed!" << endl;
+        return NULL;
+    }
+
+    newNode->data = value; // Assign the given value to the node's data
+    newNode->next = NULL; // Set the next pointer to NULL as this is a new node
+
+    return newNode;
+}
+
+int main() {
+    
+    int data;
+    
+    cout << endl << "Enter data for node: ";
+    cin >> data;
+    struct node* head = createNode(data);
+
+    // Print the data of the created node
+    cout << "Data of the first node: " << head->data << endl;
+
+    return 0;
+}
