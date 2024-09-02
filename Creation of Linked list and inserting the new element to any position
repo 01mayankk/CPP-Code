@@ -1,0 +1,97 @@
+#include <iostream> // Include the standard input/output stream library
+
+using namespace std; // Use the standard namespace
+
+// Define a structure representing a node in a linked list
+struct node {
+    int data; // Data stored in the node
+    struct node* next; // Pointer to the next node in the list
+};
+
+// Function to create a new node with the given value
+struct node* createNode(int value) {
+    // Allocate memory for the new node
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    if (newNode == NULL) { // Check for memory allocation failure
+        cout << "Memory allocation failed!" << endl;
+        return NULL;
+    }
+    // Initialize the node's data and next pointer
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a new node at the specified position in the linked list
+struct node* insertAtPosition(struct node* head, int value, int position) {
+    // Check for invalid position
+    if (position < 0) {
+        cout << "Invalid position: Position cannot be negative." << endl;
+        return head;
+    }
+
+    // Insert at the beginning of the list
+    if (position == 0) {
+        struct node* newNode = createNode(value);
+        newNode->next = head;
+        return newNode;
+    }
+
+    // Find the node at the specified position
+    struct node* current = head;
+    for (int i = 0; i < position - 1 && current != NULL; i++) {
+        current = current->next;
+    }
+
+    // Check for invalid position
+    if (current == NULL) {
+        cout << "Invalid position: Position exceeds list length." << endl;
+        return head;
+    }
+
+    // Insert the new node at the specified position
+    struct node* newNode = createNode(value);
+    newNode->next = current->next;
+    current->next = newNode;
+
+    return head;
+}
+
+// Main function
+int main() {
+    // Create an empty linked list
+    struct node* head = NULL;
+    int position, value, numNodes;
+
+    // Get the number of nodes to be inserted
+    cout << "Enter the number of nodes: ";
+    cin >> numNodes;
+
+    // Insert nodes at the end of the list
+    for (int i = 0; i < numNodes; i++) {
+        cout << "Enter value for node " << i + 1 << ": ";
+        cin >> value;
+        head = insertAtPosition(head, value, i);
+    }
+
+    // Get the position and value for the new node to be inserted
+    cout << endl << "Enter the position to insert a new node: ";
+    cin >> position;
+
+    cout << "Enter the value for the new node: ";
+    cin >> value;
+
+    // Insert the new node at the specified position
+    head = insertAtPosition(head, value, position);
+
+    // Print the linked list
+    cout << "Linked list after insertion:" << endl;
+    struct node* temp = head;
+    while (temp != NULL) {
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+
+    return 0;
+}
