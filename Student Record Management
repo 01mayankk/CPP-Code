@@ -1,0 +1,63 @@
+#include <iostream> // include iostream library for input/output operations
+#include <string> // include string library for string data type
+
+using namespace std; // use standard namespace for convenience
+
+class Student_Record { // define a class called Student_Record
+public: // public members of the class
+    int registration_id, number_of_students, No_of_Subjects; // integer data members
+    string name, section, address, subjects; // string data members
+
+    void get_information() { // member function to get student information
+        cout << "\nEnter No. of Students: "; // prompt user to enter number of students
+        cin >> number_of_students; // read number of students from input
+
+        for (int i = 1; i <= number_of_students; i++) { // loop for each student
+            cout << endl << "\nEnter Student Name: "; // prompt user to enter student name
+            cin.ignore(); // ignore newline character left in input buffer
+            getline(cin, name); // read student name from input
+
+            cout << endl << "\nEnter Student Section: "; // prompt user to enter student section
+            cin >> section; // read student section from input
+
+            cout << endl << "\nEnter Student Address: "; // prompt user to enter student address
+            cin.ignore(); // ignore newline character left in input buffer
+            getline(cin, address); // read student address from input
+
+            cout << endl << "\nEnter Student Registration Id: "; // prompt user to enter student registration ID
+            cin >> registration_id; // read student registration ID from input
+
+            cout << endl << "\nHow many subjects does student have: "; // prompt user to enter number of subjects
+            cin >> No_of_Subjects; // read number of subjects from input
+
+            subjects = ""; // initialize subjects string
+            for (int j = 1; j <= No_of_Subjects; j++) { // loop for each subject
+                cout << endl << "\nEnter Student " << i << " Subject no " << j << ". : "; // prompt user to enter subject
+                string temp; // temporary string to hold subject name
+                cin >> temp; // read subject name from input
+                subjects += temp + " "; // concatenate subjects
+            }
+
+            display_information(); // call display_information() function to display student details
+        }
+    }
+
+    void display_information() { // member function to display student information
+        cout << "\nThe Details of the Student is:\n"; // header for student details
+
+        cout << endl << "\nName: " << name; // display student name
+        cout << endl << "\nRegistration ID: " << registration_id; // display student registration ID
+        cout << endl << "\nSection: " << section; // display student section
+        cout << endl << "\nAddress of Student: " << address; // display student address
+        cout << endl << "\nThe Subjects taken by student are:   " << subjects; // display student subjects
+        cout << endl << "\n------------------------\n" << endl; // separator
+    }
+};
+
+int main() { // main function
+    Student_Record s1; // create an instance of Student_Record class
+
+    s1.get_information(); // call get_information() function to get student details
+
+    return 0; // return 0 to indicate successful execution
+}
