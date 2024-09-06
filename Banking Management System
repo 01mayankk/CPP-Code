@@ -1,0 +1,314 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <vector>
+#include <stdexcept>
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <cctype> 
+
+using namespace std;
+
+// Constants for account management
+const double MINIMUM_BALANCE = 5000.0; // Minimum balance required to open an account
+const int MINIMUM_AGE = 18; // Minimum age for account creation
+const int MAXIMUM_AGE = 70; // Maximum age for account creation (super senior citizen)
+
+// Struct to hold customer information
+struct Customer {
+    string name; // Account holder's name
+    string address; // Account holder's address
+    char accountType; // Type of account (Current or Saving)
+    double balance; // Balance in the account
+};
+
+// Class to manage account-related operations
+class Account {
+public:
+    // Constructor to initialize account details
+    Account(int accountNumber, const string& name, const string& address, char type, double initialBalance) {
+        customer.name = name; // Set account holder's name
+        customer.address = address; // Set account holder's address
+        customer.accountType = type; // Set account type
+        customer.balance = initialBalance; // Set initial balance
+        this->accountNumber = accountNumber; // Assign the account number
+    }
+
+    // Method to get the current balance
+    double getBalance() const {
+        return customer.balance; // Return the balance
+    }
+
+    // Method to get the account number
+    int getAccountNumber() const {
+        return accountNumber; // Return the account number
+    }
+
+    // Method to get the account type
+    char getAccountType() const {
+        return customer.accountType; // Return the account type
+    }
+
+    // Method to debit an amount from the account
+    void debit(double amount) {
+        if (amount > customer.balance) { // Check if there is enough balance
+            throw runtime_error("Not enough balance."); // Throw an error if not enough balance
+        }
+        customer.balance -= amount; // Deduct the amount from balance
+    }
+
+    // Method to credit an amount to the account
+    void credit(double amount) {
+        customer.balance += amount; // Add the amount to balance
+    }
+
+    // Method to get customer information
+    const Customer& getCustomerInfo() const {
+        return customer; // Return the customer information
+    }
+
+private:
+    Customer customer; // Customer information
+    int accountNumber; // Store the account number
+};
+
+// Class to handle banking operations
+class BankingOperations {
+public:
+    // Constructor to initialize banking operations
+    BankingOperations() {
+        // Seed random number generator for unique account number generation
+        srand(static_cast<unsigned int>(time(0)));
+
+        // Adding predefined accounts with unique account numbers
+        addAccount(generateUniqueAccountNumber(), "Alice Smith", "123 Maple St", 'C', 10000);
+        addAccount(generateUniqueAccountNumber(), "Bob Johnson", "456 Oak St", 'S', 15000);
+        addAccount(generateUniqueAccountNumber(), "Charlie Brown", "789 Pine St", 'C', 20000);
+    }
+
+    // Method to add a new account
+    void addAccount(int accountNumber, const string& name, const string& address, char accountType, double initialBalance) {
+        accounts.push_back(Account(accountNumber, name, address, accountType, initialBalance)); // Create and store the account
+    }
+
+    // Method to get an account by its account number
+    Account* getAccount(int accountNumber) {
+        for (auto& account : accounts) { // Loop through all accounts
+            if (account.getAccountNumber() == accountNumber) { // Check if account number matches
+                return &account; // Return the found account
+            }
+        }
+        throw out_of_range("Account number is invalid."); // Throw an error if account not found
+    }
+
+    // Method to generate a unique account number
+    int generateUniqueAccountNumber() {
+        int accountNumber;
+        bool unique;
+
+        do {
+            unique = true; // Assume the account number is unique
+            accountNumber = 12345678 + rand() % (999999999 - 12345678 + 1); // Generate a random account number within the range
+
+            // Check if the generated account number is unique
+            for (const auto& account : accounts) {
+                if (account.getAccountNumber() == accountNumber) { // If account number already exists
+                    unique = false; // Mark as not unique
+                    break; // Exit the loop
+                }
+            }
+        } while (!unique); // Repeat until a unique account number is found
+
+        return accountNumber; // Return the unique account number
+    }
+
+private:
+    vector<Account> accounts; // Store all accounts
+};
+
+// Function to convert string to uppercase
+string toUpperCase(const string& str) {
+    string upperStr = str; // Create a copy of the string
+    for (char& c : upperStr) {
+        c = toupper(c); // Convert each character to uppercase
+    }
+    return upperStr; // Return the uppercase string
+}
+
+// Class to manage user interface and interactions
+class UserInterface {
+public:
+    UserInterface(BankingOperations& operations) : bankingOperations(operations) {}
+
+    // Method to start the user interface
+    void start() {
+        int choice;
+        displayMenu(); // Display the menu
+        cin >> choice; // Get user choice
+        handleUserChoice(choice); // Handle the user's choice
+    }
+
+private:
+    BankingOperations& bankingOperations; // Reference to banking operations
+
+    // Method to display the menu options
+    void displayMenu() {
+        cout << endl << "\n*** Banking Menu ***\n";
+        cout << endl << "1. Debit\n";
+        cout << endl << "2. Credit\n";
+        cout << endl << "3. Balance Enquiry\n";
+        cout << endl << "4. Open a New Account\n";
+        cout << endl << "5. Account Details\n";
+        cout << endl << "6. Exit\n";
+        cout << endl << "Choose an option: "; // Prompt user for input
+    }
+
+    // Method to handle user choices
+    void handleUserChoice(int choice) {
+        try {
+            switch (choice) {
+                case 1: debit(); break; // Debit operation
+                case 2: credit(); break; // Credit operation
+                case 3: balance(); break; // Balance enquiry
+                case 4: openAccount(); break; // Open a new account
+                case 5: accountDetails(); break; // View account details
+                case 6: exit(); break; // Exit the program
+                default: cout << endl << "\nPLEASE ENTER A CORRECT INPUT.\n"; break; // Invalid input
+            }
+        } catch (const exception& e) {
+            cout << endl << "\nError: " << e.what() << endl; // Display error message
+        }
+
+        // End the program after performing the task
+        cout << endl << "\nThank you for using the banking system. Goodbye!\n";
+    }
+
+    // Method to debit an amount from an account
+    void debit() {
+        int accountNumber;
+        double amount;
+
+        cout << endl << "\nEnter account number: "; // Prompt for account number
+        cin >> accountNumber;
+
+        cout << endl << "\nEnter amount to debit: "; // Prompt for debit amount
+        cin >> amount;
+
+        Account* account = bankingOperations.getAccount(accountNumber); // Get the account
+        account->debit(amount); // Perform debit operation
+        cout << endl << "\nDebited Rs." << amount << " from account. New balance: Rs." << account->getBalance() << endl; // Display new balance
+    }
+
+    // Method to credit an amount to an account
+    void credit() {
+        int accountNumber;
+        double amount;
+
+        cout << endl << "\nEnter account number: "; // Prompt for account number
+        cin >> accountNumber;
+
+        cout << endl << "\nEnter amount to credit: "; // Prompt for credit amount
+        cin >> amount;
+
+        Account* account = bankingOperations.getAccount(accountNumber); // Get the account
+        account->credit(amount); // Perform credit operation
+        cout << endl << "\nCredited Rs." << amount << " to account. New balance: Rs." << account->getBalance() << endl; // Display new balance
+    }
+
+    // Method to check the balance of an account
+    void balance() {
+        int accountNumber;
+
+        cout << endl << "\nEnter account number: "; // Prompt for account number
+        cin >> accountNumber;
+
+        Account* account = bankingOperations.getAccount(accountNumber); // Get the account
+        cout << endl << "\nCurrent balance: Rs." << account->getBalance() << endl; // Display current balance
+    }
+
+    // Method to open a new account
+    void openAccount() {
+        string name, address;
+        char accountType;
+        double initialBalance;
+        int attempt = 0;
+
+        cout << endl << "\nEnter your name: "; // Prompt for account holder's name
+        cin.ignore(); // Ignore previous newline character
+        getline(cin, name); // Get the full name
+
+        cout << endl << "\nEnter your address: "; // Prompt for address
+        getline(cin, address); // Get the address
+
+        cout << endl << "\nChoose account type (C for Current, S for Saving): "; // Prompt for account type
+        cin >> accountType; // Get account type
+
+        cout << endl << "\nEnter your age: "; // Prompt for age
+        int age;
+        cin >> age;
+
+        // Check if the user is a minor or a super senior citizen
+        if (age < MINIMUM_AGE) { // Check if the user is a minor
+            cout << endl << "\nSorry, minors are not allowed to open accounts.\n"; // Display error message
+            return; // Exit the method
+        } else if (age > MAXIMUM_AGE) { // Check if the user is over 70
+            cout << endl << "\nSorry, super senior citizens (over 70) are not allowed to open accounts.\n"; // Display error message
+            return; // Exit the method
+        }
+
+        while (attempt < 3) { // Allow 3 attempts for minimum balance
+            cout << endl << "\nEnter initial balance (minimum Rs.5000): "; // Prompt for initial balance
+            cin >> initialBalance; // Get the initial balance
+
+            if (initialBalance >= MINIMUM_BALANCE) { // Check if the initial balance meets the minimum requirement
+                break; // Exit the loop if balance is valid
+            } else {
+                cout << endl << "\nMinimum balance to open an account is Rs.5000. You have " << 2 - attempt << " attempts left.\n"; // Display error message with remaining attempts
+                attempt++;
+            }
+        }
+
+        if (attempt == 3) { // If all attempts are exhausted
+            cout << endl << "\nSorry, your account cannot be created due to insufficient initial balance.\n"; // Display error message
+            return; // Exit the method
+        }
+
+        int accountNumber = bankingOperations.generateUniqueAccountNumber(); // Generate a unique account number
+        bankingOperations.addAccount(accountNumber, name, address, accountType, initialBalance); // Add the new account
+
+        // Display account creation details
+        cout << endl << "\nAccount created successfully:\n";
+        cout << "Account Holder Name : " << toUpperCase(name) << endl; // Display account holder's name in uppercase
+        cout << "Account Number : " << accountNumber << endl; // Display generated account number
+        cout << "Account Type : " << (accountType == 'C' ? "Current" : "Saving") << endl; // Display account type
+        cout << "Available Balance : Rs." << initialBalance << endl; // Display initial balance
+    }
+
+    // Method to view account details
+    void accountDetails() {
+        int accountNumber;
+
+        cout << endl << "\nEnter account number: "; // Prompt for account number
+        cin >> accountNumber;
+
+        Account* account = bankingOperations.getAccount(accountNumber); // Get the account
+        const Customer& customerInfo = account->getCustomerInfo(); // Get customer information
+        cout << endl << "\nAccount Details:\n"
+             << endl << "Account Holder Name: " << customerInfo.name << "\n" // Display account holder's name
+             << endl << "Account Balance: Rs." << account->getBalance() << endl; // Display account balance
+    }
+
+    // Method to exit the program
+    void exit() {
+        cout << endl << "\nThank you for banking with us. Please visit again.\n"; // Thank you message
+    }
+};
+
+int main() {
+    BankingOperations bankingOperations; // Create an instance of banking operations
+    UserInterface ui(bankingOperations); // Create an instance of user interface
+    ui.start(); // Start the user interface
+
+    return 0; // Return success
+}
