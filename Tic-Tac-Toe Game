@@ -1,0 +1,108 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Game {
+private:
+    string player_1, player_2;  // Names of the players
+    char choice_1, choice_2;     // Player choices ('X' or 'O')
+    vector<char> board;           // Represents the game board
+
+public:
+    // Constructor to initialize the game
+    Game() : board(9, ' ') {
+        cout << endl << "This is a Tic-Tac-Toe Game.\nBelow you can see the board and the position number.\n"
+             << "So press position number where you want to insert your move." << endl;
+    }
+
+    // Function to get player information and choices
+    void get_information() {
+        cout << endl << "Enter Player 1 name: ";
+        cin >> player_1;  // Input for Player 1's name
+        cout << "Choose 'X' or 'O': ";
+        cin >> choice_1;  // Input for Player 1's choice
+
+        // Assign the other choice automatically for Player 2
+        choice_2 = (choice_1 == 'X') ? 'O' : 'X';
+        cout << endl << "Enter Player 2 name: ";
+        cin >> player_2;  // Input for Player 2's name
+        cout << "You will play with " << choice_2 << endl;  // Display Player 2's choice
+    }
+
+    // Function to display the current state of the board
+    void view_board() {
+        cout << endl;
+        for (int i = 0; i < 3; ++i) {  // Loop through rows
+            cout << " | ";
+            for (int j = 0; j < 3; ++j) {  // Loop through columns
+                cout << board[i * 3 + j] << " | ";  // Display each cell
+            }
+            cout << endl << "---------------" << endl;  // Separator for rows
+        }
+    }
+
+    // Function to make a move on the board
+    bool make_move(int position, char choice) {
+        // Check if the move is valid
+        if (position < 1 || position > 9 || board[position - 1] != ' ') {
+            cout << "Invalid move! Try again." << endl;  // Error message for invalid moves
+            return false;  // Move was not made
+        }
+        board[position - 1] = choice;  // Make the move on the board
+        return true;  // Move was successful
+    }
+
+    // Function to check if a player has won
+    bool check_winner(char choice) {
+        // Check rows, columns, and diagonals for a win
+        for (int i = 0; i < 3; ++i) {
+            if (board[i * 3] == choice && board[i * 3 + 1] == choice && board[i * 3 + 2] == choice)
+                return true;  // Row win
+            if (board[i] == choice && board[i + 3] == choice && board[i + 6] == choice)
+                return true;  // Column win
+        }
+        // Check diagonals
+        if ((board[0] == choice && board[4] == choice && board[8] == choice) ||
+            (board[2] == choice && board[4] == choice && board[6] == choice))
+            return true;  // Diagonal win
+
+        return false;  // No win
+    }
+
+    // Function to manage the game play
+    void play_game() {
+        get_information();  // Get player names and choices
+        char current_player = choice_1;  // Start with Player 1
+        string current_name = player_1;
+
+        for (int turn = 0; turn < 9; ++turn) {  // Maximum of 9 turns
+            view_board();  // Show the board
+            int move;
+            while (true) {
+                cout << current_name << ", enter your choice position (1-9): ";
+                cin >> move;  // Player inputs their move
+                if (make_move(move, current_player))
+                    break;  // Exit loop if the move is successful
+            }
+
+            // Check if the current player has won
+            if (check_winner(current_player)) {
+                view_board();  // Show the board one last time
+                cout << current_name << " wins!" << endl;  // Declare winner
+                return;  // End the game
+            }
+
+            // Switch players for the next turn
+            current_player = (current_player == choice_1) ? choice_2 : choice_1;
+            current_name = (current_name == player_1) ? player_2 : player_1;
+        }
+        view_board();  // Show the board in case of a draw
+        cout << "It's a draw!" << endl;  // Declare draw
+    }
+};
+
+int main() {
+    Game g1;  // Create a new game instance
+    g1.play_game();  // Start the game
+    return 0;
+}
