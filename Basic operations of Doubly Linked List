@@ -1,0 +1,294 @@
+#include <iostream>
+using namespace std;
+
+class DoublyLinkedList
+{
+private:
+
+    class Node
+    {
+    public:
+        int data;
+        Node* next;
+        Node* prev;
+
+        Node(int val)
+        {
+            data = val;
+            next = nullptr;
+            prev = nullptr;
+        }
+    };
+
+    Node* head;
+    Node* tail;
+
+    // Utility function to get size
+    int getSize()
+    {
+        int count = 0;
+        Node* temp = head;
+        while (temp != nullptr)
+        {
+            count++;
+            temp = temp->next;
+        }
+        return count;
+    }
+
+public:
+
+    DoublyLinkedList()
+    {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void insertAtStart(int val)
+    {
+        Node* newNode = new Node(val);
+
+        if (head == nullptr)
+        {
+            head = tail = newNode;
+            return;
+        }
+
+        newNode->next = head;
+        head->prev = newNode;
+        head = newNode;
+    }
+
+    void insertAtEnd(int val)
+    {
+        Node* newNode = new Node(val);
+
+        if (head == nullptr)
+        {
+            head = tail = newNode;
+            return;
+        }
+
+        tail->next = newNode;
+        newNode->prev = tail;
+        tail = newNode;
+    }
+
+    void insertAtPosition(int val, int pos)
+    {
+        int size = getSize();
+
+        if (pos < 1 || pos > size + 1)
+        {
+            cout << "Invalid Position!\n";
+            return;
+        }
+
+        if (pos == 1)
+        {
+            insertAtStart(val);
+            return;
+        }
+
+        if (pos == size + 1)
+        {
+            insertAtEnd(val);
+            return;
+        }
+
+        Node* newNode = new Node(val);
+        Node* temp = head;
+
+        for (int i = 1; i < pos; i++)
+            temp = temp->next;
+
+        newNode->prev = temp->prev;
+        newNode->next = temp;
+
+        temp->prev->next = newNode;
+        temp->prev = newNode;
+    }
+
+    void deleteFromStart()
+    {
+        if (head == nullptr)
+        {
+            cout << "List Empty\n";
+            return;
+        }
+
+        if (head == tail)
+        {
+            delete head;
+            head = tail = nullptr;
+            return;
+        }
+
+        Node* temp = head;
+        head = head->next;
+        head->prev = nullptr;
+        delete temp;
+    }
+
+    void deleteFromEnd()
+    {
+        if (head == nullptr)
+        {
+            cout << "List Empty\n";
+            return;
+        }
+
+        if (head == tail)
+        {
+            delete tail;
+            head = tail = nullptr;
+            return;
+        }
+
+        Node* temp = tail;
+        tail = tail->prev;
+        tail->next = nullptr;
+        delete temp;
+    }
+
+    void deleteFromPosition(int pos)
+    {
+        int size = getSize();
+
+        if (pos < 1 || pos > size)
+        {
+            cout << "Invalid Position!\n";
+            return;
+        }
+
+        if (pos == 1)
+        {
+            deleteFromStart();
+            return;
+        }
+
+        if (pos == size)
+        {
+            deleteFromEnd();
+            return;
+        }
+
+        Node* temp = head;
+
+        for (int i = 1; i < pos; i++)
+            temp = temp->next;
+
+        temp->prev->next = temp->next;
+        temp->next->prev = temp->prev;
+
+        delete temp;
+    }
+
+    void display()
+    {
+        if (head == nullptr)
+        {
+            cout << "List is Empty\n";
+            return;
+        }
+
+        Node* temp = head;
+
+        while (temp != nullptr)
+        {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+};
+
+
+int main()
+{
+    DoublyLinkedList dll;
+
+    int n;
+    cout << "How many nodes do you want to insert? ";
+    cin >> n;
+
+    for (int i = 0; i < n; i++)
+    {
+        int val, choice;
+
+        cout << "\nEnter value: ";
+        cin >> val;
+
+        cout << "Insert at:\n";
+        cout << "1. Start\n";
+        cout << "2. End\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 1)
+            dll.insertAtStart(val);
+        else if (choice == 2)
+            dll.insertAtEnd(val);
+        else
+            cout << "Invalid choice!\n";
+    }
+
+    cout << "\nOriginal List:\n";
+    dll.display();
+
+    // ----- Deletion Section -----
+    char delChoice;
+    cout << "\nDo you want to delete a node? (y/n): ";
+    cin >> delChoice;
+
+    if (delChoice == 'y' || delChoice == 'Y')
+    {
+        int where;
+        cout << "Delete from:\n";
+        cout << "1. Start\n";
+        cout << "2. End\n";
+        cout << "Enter choice: ";
+        cin >> where;
+
+        if (where == 1)
+            dll.deleteFromStart();
+        else if (where == 2)
+            dll.deleteFromEnd();
+        else
+            cout << "Invalid choice!\n";
+
+        cout << "\nList After Deletion:\n";
+        dll.display();
+    }
+    else
+    {
+        cout << "\nNo deletion performed.\n";
+    }
+
+    // ----- Insert at Position Section -----
+    char insertPosChoice;
+    cout << "\nDo you want to insert at a specific position? (y/n): ";
+    cin >> insertPosChoice;
+
+    if (insertPosChoice == 'y' || insertPosChoice == 'Y')
+    {
+        int val, pos;
+
+        cout << "Enter value to insert: ";
+        cin >> val;
+
+        cout << "Enter position (1-based index): ";
+        cin >> pos;
+
+        dll.insertAtPosition(val, pos);
+
+        cout << "\nList After Inserting at Position:\n";
+        dll.display();
+    }
+    else
+    {
+        cout << "\nNo position insertion performed.\n";
+    }
+
+    return 0;
+}
