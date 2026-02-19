@@ -1,0 +1,113 @@
+#include <iostream>
+using namespace std;
+
+// Node class represents a single node of Binary Tree
+class Node {
+public:
+    int data;        // Value stored in the node
+    Node* left;      // Pointer to left child
+    Node* right;     // Pointer to right child
+
+    // Constructor to initialize node value
+    Node(int val) {
+        data = val;
+        left = nullptr;   // Initially no children
+        right = nullptr;
+    }
+};
+
+// Class to build and traverse Binary Tree
+class BuildTree {
+public:
+
+    // Function to insert node in binary tree
+    // This does NOT build a BST
+    // It simply fills left child first, then right child
+    Node* insertBinaryTree(Node* root, int data) {
+
+        // If tree is empty, create root node
+        if(root == nullptr) {
+            return new Node(data);
+        }
+
+        // If left child is empty, insert here
+        if(root->left == nullptr) {
+            root->left = new Node(data);
+        }
+        // Else if right child is empty, insert here
+        else if(root->right == nullptr) {
+            root->right = new Node(data);
+        }
+        // If both children exist, recursively insert into left subtree
+        else {
+            insertBinaryTree(root->left, data);
+        }
+
+        return root;   // Return unchanged root
+    }
+
+    // Preorder Traversal
+    // Order: Root → Left → Right
+    void preOrder(Node* root) {
+        if(root != nullptr) {
+
+            cout << " " << root->data;   // Visit root first
+            preOrder(root->left);        // Then left subtree
+            preOrder(root->right);       // Then right subtree
+        }
+    }
+
+    // Postorder Traversal
+    // Order: Left → Right → Root
+    void postOrder(Node* root) {
+        if(root != nullptr) {
+
+            postOrder(root->left);       // Visit left subtree
+            postOrder(root->right);      // Visit right subtree
+            cout << " " << root->data;   // Visit root last
+        }
+    }
+
+    // Inorder Traversal
+    // Order: Left → Root → Right
+    void inOrder(Node* root) {
+        if(root != nullptr) {
+
+            inOrder(root->left);         // Visit left subtree
+            cout << " " << root->data;   // Visit root
+            inOrder(root->right);        // Visit right subtree
+        }
+    }
+};
+
+int main() {
+
+    int no_of_nodes;
+    Node* root = nullptr;   // Initially tree is empty
+    BuildTree tree;         // Create object to access tree functions
+
+    cout << "Enter Number of nodes: ";
+    cin >> no_of_nodes;
+
+    // Loop to insert nodes
+    for(int i = 0; i < no_of_nodes; i++) {
+        int value;
+        cout << "Enter Node Value: ";
+        cin >> value;
+
+        // Insert value into tree
+        root = tree.insertBinaryTree(root, value);
+    }
+
+    // Display traversals
+    cout << "\nPreorder: ";
+    tree.preOrder(root);
+
+    cout << "\nPostorder: ";
+    tree.postOrder(root);
+
+    cout << "\nInorder: ";
+    tree.inOrder(root);
+
+    return 0;
+}
